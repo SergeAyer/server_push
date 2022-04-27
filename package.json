@@ -1,0 +1,19 @@
+{
+  "name": "planet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node update-server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "cors": "^2.8.5",
+    "sse-node": "^1.0.2",
+    "ws": "^8.4.0"
+  },
+  "devDependencies": {}
+}

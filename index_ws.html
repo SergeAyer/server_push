@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title> Getting the score </title>
+    <!-- jQuery javascript integration -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<button onclick=getScore()>Launch score update</button>
+<button onclick=closeWS()>Close WebSocket</button>
+<button onclick=sendDateMessage()>Send date message</button>
+<p id="nbrOfMessagesIn"> Number of received messages received is 0</p>
+<p id="nbrOfMessagesOut"> Number of sent messages is 0</p>
+<p id="score"> No score </p>
+
+<script type="text/javascript">
+
+  let nbrOfMessagesIn = 0;
+  let nbrOfMessagesOut = 0;
+
+  let socket = null;
+
+  function getScore() {
+    // Create WebSocket connection
+    socket = new WebSocket('ws://localhost:8080');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+      socket.send('WebSocket opened!');
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+      // test the type of data
+      console.log("Received data string: " + event.data);
+
+      if (event.data === "") {
+        console.log("event with no data received");
+        return;
+      }
+
+      let message = event.data;
+      console.log(event.data);
+
+      // update the message
+      $("#score").html(message);
+
+      // update the number of received messages
+      nbrOfMessagesIn++;
+      $("#nbrOfMessagesIn").html("Number of messages received is " + nbrOfMessagesIn);
+    });
+
+    // In case of error, close the websocket
+    socket.addEventListener('error', function (event) {
+      console.log("Error");
+      socket.close();
+
+      // check the reason for the error
+      if (event.code !== 1000) {
+        // Error code 1000 means that the connection was closed normally.
+        // check whether we are still connected to the Internet
+        if (!navigator.onLine) {
+          alert("You are offline. Please connect to the Internet and try again.");
+        }
+        else {
+          // we could try to reconnect
+        }
+      }
+    });
+
+    socket.addEventListener('close', function (event) {
+      // Connection was closed
+      console.log("Connection was closed");
+      socket.close();
+    });
+  }
+
+  function closeWS() {
+    if (socket != null) {
+      socket.close();
+    }
+  }
+
+  function sendDateMessage() {
+    if (socket != null) {
+      let msg = Date().toString();
+      socket.send(msg);
+
+      // update the message sent
+      $("#messageOut").html(msg);
+
+      // update the number of sent messages
+      nbrOfMessagesOut++;
+      $("#nbrOfMessagesOut").html("Number of sent messages is " + nbrOfMessagesOut);
+    }
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title> Getting the score </title>
+    <!-- jQuery javascript integration -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<button onclick=getScore()>Launch score update</button>
+<p id="successfulCalls"> Number of successful calls is 0</p>
+<p id="timeoutCalls"> Number of calls with timeout is 0</p>
+<p id="score"> No score </p>
+
+<script type="text/javascript">
+
+  const interval = 10000;
+  let baseUrl = "http://localhost:8080/basicpolling";
+  let nbrOfSuccessfulCalls = 0;
+
+  function status(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return Promise.resolve(response.text());
+    } else {
+      return Promise.reject(new Error(response.statusText));
+    }
+  }
+
+  function showScore(text) {
+    nbrOfSuccessfulCalls++;
+
+    // update the score
+    $("#score").html(text);
+
+    // update the number of calls value
+    $("#successfulCalls").html("Number of successful calls is " + nbrOfSuccessfulCalls);
+
+    // launch next polling
+    setTimeout(() => getScore(), interval);
+  }
+
+  function showError(error) {
+    alert(`Sorry, there was a problem: ${error}` );
+  }
+
+  // Method for getting the score
+  function getScore() {
+    fetch(baseUrl, {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      headers: {
+        'Accept': 'text/plain'
+      }
+    })
+      .then(response => status(response))
+      .then(response => showScore(response))
+      .catch(error => showError(error));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title> Getting the score </title>
+    <!-- jQuery javascript integration -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<button onclick=getScore()>Launch score update</button>
+<p id="nbrOfMessages"> Number of messages is 0</p>
+<p id="score"> No score </p>
+
+<script type="text/javascript">
+
+  let nbrOfMessages = 0;
+
+  function getScore() {
+
+    let sseClient = new EventSource("http://localhost:8080/sse");
+
+    // set the listener for receiving data notifications
+    sseClient.onmessage = function (event) {
+      if (event.data === "") {
+        console.log("event with no data received");
+        return;
+      }
+
+      let message = event.data;
+      console.log(event.data);
+
+      // update the message
+      $("#score").html(message.toString());
+
+      // update the number of calls value
+      nbrOfMessages++;
+      $("#nbrOfMessages").html("Number of messages received is " + nbrOfMessages);
+    };
+
+    // In case of error, stop the observation
+    sseClient.onerror = function (event) {
+      if (event.readyState === EventSource.CLOSED) {
+        // Connection was closed
+        console.log("Connection was closed");
+        sseClient.target.close();
+      }
+      else {
+        console.log("Error in sseClient");
+        if (typeof sseClient.target != 'undefined') {
+          sseClient.target.close();
+        }
+      }
+      sseClient = null;
+    }
+  }
+
+</script>
+</body>
+</html>

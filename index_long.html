@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title> Getting the score </title>
+    <!-- jQuery javascript integration -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<button onclick=getScore()>Launch score update</button>
+<p id="successfulCalls"> Number of successful calls is 0</p>
+<p id="timeoutCalls"> Number of calls with timeout is 0</p>
+<p id="score"> No score </p>
+
+<script type="text/javascript">
+
+  const interval = 10000;
+  let baseUrl = "http://localhost:8080/longpolling";
+  let nbrOfSuccessfulCalls = 0;
+  let nbrOfTimeOuts = 0;
+
+  function status(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return Promise.resolve(response.text());
+    } else {
+      return Promise.reject(new Error(response.statusText));
+    }
+  }
+
+  function showScore(text) {
+    // an empty text means that a timeout occurs on the server side
+    // in this case, the server sends an empty payload
+    if (text === "") {
+      // update the number of timeouts value
+      nbrOfTimeOuts++;
+      $("#timeoutCalls").html("Number of calls with timeout is " + nbrOfTimeOuts);
+    }
+    else {
+      // update the number of successful calls value
+      nbrOfSuccessfulCalls++;
+      $("#successfulCalls").html("Number of successful calls is " + nbrOfSuccessfulCalls);
+
+      // update the score
+      $("#score").html(text);
+    }
+
+    // launch next request immediately
+    getScore();
+  }
+
+  function showError(error) {
+    if (typeof error.text === 'function') {
+      error.text().then(errorMessage => {
+        //this.props.dispatch(displayTheError(errorMessage))
+        alert(`Sorry, there was a problem: ${errorMessage}` );
+      });
+    }
+    else {
+      alert(`Sorry, there was a problem: ${error}` );
+    }
+  }
+
+  // Method for getting the score
+  function getScore() {
+    fetch(baseUrl, {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      headers: {
+        'Accept': 'text/plain'
+      }
+    })
+      .then(response => status(response))
+      .then(response => showScore(response))
+      .catch(error => showError(error));
+  }
+</script>
+</body>
+</html>

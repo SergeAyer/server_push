@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node update-server.js"
+    "start": "node update_server.js"
   },
   "keywords": [],
   "author": "",

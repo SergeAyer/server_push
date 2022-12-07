@@ -48,6 +48,7 @@ app.get('/longpolling', function (req, res, next) {
 // for handling timeouts and send an empty response before it happens
 // we run a function at regular interval that check for timeout and
 // does send an empty response
+const timeOutValue = 10000;
 setInterval(() => {
   // close out requests that are withing 10 seconds to timeout
   if (pending_response && pending_response_date) {
@@ -61,6 +62,6 @@ setInterval(() => {
       pending_date = null;
     }
   }
-}, 1000);
+}, timeOutValue);
 
 module.exports = app;

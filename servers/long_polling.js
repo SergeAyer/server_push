@@ -54,12 +54,12 @@ setInterval(() => {
   if (pending_response && pending_response_date) {
     let elapsed_time = new Date().getTime() - pending_response_date;
     const allowed_margin = 10000;
-    // we expect that the time out is set for the
+    // we expect that app.server.timeout is set
     if (elapsed_time >= app.server.timeout - allowed_margin) {
       pending_response.writeHead(200, {"Content-Type": "text/plain"});
       pending_response.end("");
       pending_response = null;
-      pending_date = null;
+      pending_response_date = null;
     }
   }
 }, timeOutValue);

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node update_server.js"
   },
@@ -10,10 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "sse-node": "^1.0.2",
-    "ws": "^8.4.0"
+    "ws": "^8.21.3"
   },
   "devDependencies": {}
 }

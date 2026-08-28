@@ -1,4 +1,5 @@
-const http = require('http');
+import http from 'node:http';
+import { WebSocketServer } from 'ws';
 
 // HTTP Server
 const port = 8080;
@@ -10,8 +11,7 @@ server.listen(port, function () {
 });
 
 // create the WebSocket server
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocketServer({ server });
 
 let score = "0:0";
 
@@ -33,8 +33,7 @@ process.stdin.on('readable', () => {
 });
 
 wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+  ws.on('message', function incoming(message) { console.log('received: %s', message);
   });
 
   ws.on('close', function close() {

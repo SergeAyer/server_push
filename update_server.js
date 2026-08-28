@@ -1,5 +1,5 @@
 // http server to use: needs to be modified for using different servers
-const httpServer = require('./servers/long_polling');
+import httpServer from './servers/sse.js';
 
 // HTTP Server
 const port = 8080;

@@ -1,5 +1,5 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
 let score = "0:0";
 
@@ -23,4 +23,4 @@ app.get('/basicpolling', function (req, res, next) {
   res.end();
 });
 
-module.exports = app;
+export default app;

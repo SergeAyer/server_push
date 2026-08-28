@@ -1,5 +1,5 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
 let score = "0:0";
 let pending_response;
@@ -48,9 +48,9 @@ app.get('/longpolling', function (req, res, next) {
 // for handling timeouts and send an empty response before it happens
 // we run a function at regular interval that check for timeout and
 // does send an empty response
-const timeOutValue = 10000;
+const timeOutValue = 60000;
 setInterval(() => {
-  // close out requests that are withing 10 seconds to timeout
+  // close out requests that are within 10 seconds to timeout
   if (pending_response && pending_response_date) {
     let elapsed_time = new Date().getTime() - pending_response_date;
     const allowed_margin = 10000;
@@ -64,4 +64,4 @@ setInterval(() => {
   }
 }, timeOutValue);
 
-module.exports = app;
+export default app;

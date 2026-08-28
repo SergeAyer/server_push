@@ -1,6 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const SSE = require("sse-node");
+import express from 'express';
+import cors from 'cors';
+import SSE from 'sse-node';
 
 let score = "0:0";
 
@@ -50,4 +50,4 @@ app.get('/sse', function (req, res, next) {
   }
 });
 
-module.exports = app;
+export default app;
